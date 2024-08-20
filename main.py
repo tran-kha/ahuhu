@@ -8,6 +8,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from tqdm import tqdm
 import argparse
 from collections import OrderedDict
+import re
 
 # OrderedDict of Bible books and their number of chapters, in order
 bible_books = OrderedDict([
@@ -28,78 +29,21 @@ bible_books = OrderedDict([
 
 # Dictionary mapping Bible versions to their corresponding IDs on bible.com
 bible_versions = {
-'AMP': '1588',
-'AMPC': '8',
-'ASV': '12',
-'BSB': '3034',
-'CEB': '37',
-'CEV': '392',
-'CEVDCI': '303',
-'CEVUK': '294',
-'CJB': '1275',
-'CPDV': '42',
-'CSB': '1713',
-'DARBY': '478',
-'DRC1752': '55',
-'EASY': '2079',
-'ERV': '406',
-'ESV': '59',
-'FBV': '1932',
-'FNVNT': '3633',
-'GNBDC': '416',
-'GNBDK': '431',
-'GNBUK': '296',
-'GNT': '68',
-'GNTD': '69',
-'GNV': '2163',
-'GW': '70',
-'GWC': '1047',
-'HCSB': '72',
-'ICB': '1359',
-'JUB': '1077',
-'KJV': '1',
-'KJVAAE': '546',
-'KJVAE': '547',
-'LEB': '90',
-'LSB': '3345',
-'MEV': '1171',
-'MP1650': '1365',
-'MP1781': '3051',
-'MSG': '97',
-'NABRE': '463',
-'NASB1995': '100',
-'NASB2020': '2692',
-'NCV': '105',
-'NET': '107',
-'NIRV': '110',
-'NIV': '111',
-'NIVUK': '113',
-'NKJV': '114',
-'NLT': '116',
-'NMV': '2135',
-'NRSV': '2016',
-'NRSV-CI': '2015',
-'NRSVUE': '3523',
-'OYBCENGL': '3915',
-'PEV': '2530',
-'RAD': '2753',
-'RSV': '2020',
-'RSV-C': '2017',
-'RSVCI': '3548',
-'RV1885': '477',
-'RV1895': '1922',
-'TCENT': '3427',
-'TEG': '3010',
-'TLV': '314',
-'TOJB2011': '130',
-'TPT': '1849',
-'TS2009': '316',
-'WBMS': '2407',
-'WEBBE': '1204',
-'WEBUS': '206',
-'WMB': '1209',
-'WMBBE': '1207',
-'YLT98': '821'
+'AMP': '1588', 'AMPC': '8', 'ASV': '12', 'BSB': '3034', 'CEB': '37',
+'CEV': '392', 'CEVDCI': '303', 'CEVUK': '294', 'CJB': '1275', 'CPDV': '42',
+'CSB': '1713', 'DARBY': '478', 'DRC1752': '55', 'EASY': '2079', 'ERV': '406',
+'ESV': '59', 'FBV': '1932', 'FNVNT': '3633', 'GNBDC': '416', 'GNBDK': '431',
+'GNBUK': '296', 'GNT': '68', 'GNTD': '69', 'GNV': '2163', 'GW': '70',
+'GWC': '1047', 'HCSB': '72', 'ICB': '1359', 'JUB': '1077', 'KJV': '1',
+'KJVAAE': '546', 'KJVAE': '547', 'LEB': '90', 'LSB': '3345', 'MEV': '1171',
+'MP1650': '1365', 'MP1781': '3051', 'MSG': '97', 'NABRE': '463', 'NASB1995': '100',
+'NASB2020': '2692', 'NCV': '105', 'NET': '107', 'NIRV': '110', 'NIV': '111',
+'NIVUK': '113', 'NKJV': '114', 'NLT': '116', 'NMV': '2135', 'NRSV': '2016',
+'NRSV-CI': '2015', 'NRSVUE': '3523', 'OYBCENGL': '3915', 'PEV': '2530', 'RAD': '2753',
+'RSV': '2020', 'RSV-C': '2017', 'RSVCI': '3548', 'RV1885': '477', 'RV1895': '1922',
+'TCENT': '3427', 'TEG': '3010', 'TLV': '314', 'TOJB2011': '130', 'TPT': '1849',
+'TS2009': '316', 'WBMS': '2407', 'WEBBE': '1204', 'WEBUS': '206', 'WMB': '1209',
+'WMBBE': '1207', 'YLT98': '821'
 }
 
 # Setup logging
@@ -135,6 +79,11 @@ def get_numbered_book_name(book):
     book_number = list(bible_books.keys()).index(book) + 1
     return f"{book_number:02d}_{book}"
 
+def clean_verse_text(text):
+    # Sử dụng regex để loại bỏ số câu ở đầu chuỗi
+    cleaned_text = re.sub(r'^\d+', '', text).strip()
+    return cleaned_text
+
 def scrape_bible_chapter(book, chapter_number, version, progress):
     version_id = bible_versions.get(version)
     if not version_id:
@@ -147,13 +96,27 @@ def scrape_bible_chapter(book, chapter_number, version, progress):
         response.raise_for_status()
         soup = BeautifulSoup(response.content, 'html.parser')
         verses = soup.select('span[data-usfm]')
+        
+        # Sử dụng một dictionary để lưu trữ câu mới nhất cho mỗi số câu
+        verse_dict = {}
+        for verse in verses:
+            verse_number = verse['data-usfm'].split('.')[-1]
+            text = clean_verse_text(verse.text.strip())
+            if text or verse_number not in verse_dict:
+                verse_dict[verse_number] = text
+
+        # Chuyển đổi dictionary thành list of dictionaries
         bible_data = [
             {
-                "verse_number": verse['data-usfm'].split('.')[-1],
-                "text": verse.text.strip()
+                "verse_number": verse_number,
+                "text": text
             }
-            for verse in verses
+            for verse_number, text in verse_dict.items()
         ]
+
+        # Sắp xếp các câu theo thứ tự số câu
+        bible_data.sort(key=lambda x: int(x['verse_number']))
+
         # Create directory for the book and version if it doesn't exist
         numbered_book = get_numbered_book_name(book)
         book_dir = os.path.join('data', version, numbered_book)
@@ -162,7 +125,7 @@ def scrape_bible_chapter(book, chapter_number, version, progress):
         filename = f"{book}_{chapter_number:03d}_{version}.json"
         with open(os.path.join(book_dir, filename), 'w', encoding='utf-8') as f:
             json.dump(bible_data, f, ensure_ascii=False, indent=4)
-        logging.info(f"{filename} has been scraped and saved in {book_dir}.")
+        logging.info(f"{filename} has been scraped, cleaned, and saved in {book_dir}.")
 
         # Update progress
         if version not in progress:
