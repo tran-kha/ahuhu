@@ -1,0 +1,118 @@
+{
+  "versions": [
+    {
+      "code": "KTHD",
+      "name": "Kinh Thánh Hiện Đại",
+      "id": "1638",
+      "url_pattern": "https://www.bible.com/bible/1638/{book}.{chapter}.KTHD"
+    },
+    {
+      "code": "NVB",
+      "name": "Nền Tảng Vững Bền",
+      "id": "449",
+      "url_pattern": "https://www.bible.com/bible/449/{book}.{chapter}.NVB"
+    },
+    {
+      "code": "VIE1925",
+      "name": "Vietnamese Bible 1925",
+      "id": "193",
+      "url_pattern": "https://www.bible.com/bible/193/{book}.{chapter}.VIE1925"
+    },
+    {
+      "code": "BD2011",
+      "name": "Bản Dịch 2011",
+      "id": "19",
+      "url_pattern": "https://www.bible.com/bible/19/{book}.{chapter}.BD2011"
+    },
+    {
+      "code": "BPT",
+      "name": "Bản Phổ Thông",
+      "id": "205",
+      "url_pattern": "https://www.bible.com/bible/205/{book}.{chapter}.BPT"
+    },
+    {
+      "code": "VIE2010",
+      "name": "Vietnamese Bible 2010",
+      "id": "151",
+      "url_pattern": "https://www.bible.com/bible/151/{book}.{chapter}.VIE2010"
+    },
+    {
+      "code": "RAD2015",
+      "name": "Tiếng Ê-đê",
+      "id": "1522",
+      "url_pattern": "https://www.bible.com/bible/1522/{book}.{chapter}.RAD2015"
+    },
+    {
+      "code": "BDQ",
+      "name": "Tiếng Bana",
+      "id": "2137",
+      "url_pattern": "https://www.bible.com/bible/2137/{book}.{chapter}.BDQ"
+    },
+    {
+    "code": "AMP",
+    "name": "Amplified Bible",
+    "id": "1588",
+    "url_pattern": "https://www.bible.com/bible/1588/{book}.{chapter}.AMP"
+    },
+    {
+    "code": "AMPC",
+    "name": "Amplified Bible, Classic Edition",
+    "id": "8",
+    "url_pattern": "https://www.bible.com/bible/8/{book}.{chapter}.AMPC"
+    },
+    {
+    "code": "ASV",
+    "name": "American Standard Version",
+    "id": "12",
+    "url_pattern": "https://www.bible.com/bible/12/{book}.{chapter}.ASV"
+    },
+    {
+    "code": "BSB",
+    "name": "Berean Study Bible",
+    "id": "3034",
+    "url_pattern": "https://www.bible.com/bible/3034/{book}.{chapter}.BSB"
+    },
+    {
+    "code": "CEB",
+    "name": "Common English Bible",
+    "id": "37",
+    "url_pattern": "https://www.bible.com/bible/37/{book}.{chapter}.CEB"
+    },
+    {
+    "code": "CEV",
+    "name": "Contemporary English Version",
+    "id": "392",
+    "url_pattern": "https://www.bible.com/bible/392/{book}.{chapter}.CEV"
+    },
+    {
+    "code": "CEVDCI",
+    "name": "Contemporary English Version (Deuterocanonical Interconfessional)",
+    "id": "303",
+    "url_pattern": "https://www.bible.com/bible/303/{book}.{chapter}.CEVDCI"
+    },
+    {
+    "code": "CEVUK",
+    "name": "Contemporary English Version (UK)",
+    "id": "294",
+    "url_pattern": "https://www.bible.com/bible/294/{book}.{chapter}.CEVUK"
+    },
+    {
+    "code": "CJB",
+    "name": "Complete Jewish Bible",
+    "id": "1275",
+    "url_pattern": "https://www.bible.com/bible/1275/{book}.{chapter}.CJB"
+    },
+    {
+    "code": "CPDV",
+    "name": "Catholic Public Domain Version",
+    "id": "42",
+    "url_pattern": "https://www.bible.com/bible/42/{book}.{chapter}.CPDV"
+    },
+    {
+    "code": "CSB",
+    "name": "Christian Standard Bible",
+    "id": "1713",
+    "url_pattern": "https://www.bible.com/bible/1713/{book}.{chapter}.CSB"
+    }
+  ]
+}
